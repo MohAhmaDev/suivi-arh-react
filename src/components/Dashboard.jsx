@@ -28,7 +28,7 @@ export default function Dashboard({ token, onLogout = () => {} }) {
     async function load() {
       setLoading(true);
       try {
-        const res = await fetch(API_BASE + "api/dashboard/", {
+        const res = await fetch(API_BASE + "api/auth/dashboard/", {
           headers: { Authorization: `Token ${token}` },
         });
         if (!res.ok) {
@@ -52,7 +52,7 @@ export default function Dashboard({ token, onLogout = () => {} }) {
 
   async function logout() {
     try {
-      await fetch(API_BASE + "api/logout/", {
+      await fetch(API_BASE + "api/auth/logout/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token }),

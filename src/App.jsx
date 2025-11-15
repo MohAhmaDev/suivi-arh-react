@@ -33,7 +33,7 @@ function App() {
       let mounted = true;
 
       try {
-        const res = await fetch(API_BASE + "api/dashboard/", {
+        const res = await fetch(API_BASE + "api/auth/dashboard/", {
           headers: { Authorization: `Token ${token}` },
         });
 
