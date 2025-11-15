@@ -7,29 +7,48 @@
     <title>suivi-arh-react-django</title>
     <meta name="description" content="suivi-arh-react-django — coming soon" />
     <style>
-      /* Minimal fallback styles for non-JS/SEO */
-      .fallback-root {
-        font-family: system-ui, -apple-system, "Segoe UI", Roboto,
-          "Helvetica Neue", Arial;
-        text-align: center;
-        padding: 6rem 1rem;
+      .spinner-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f8fafc;
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
       }
-      .fallback-root h1 {
-        font-size: 2.25rem;
-        margin: 0;
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid rgba(59, 130, 246, 0.2);
+        border-left: 4px solid #3b82f6;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
       }
-      .fallback-root p {
-        margin-top: 0.75rem;
-        color: #555;
-        font-size: 1.125rem;
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .loading-text {
+        margin-top: 16px;
+        color: #64748b;
+        font-size: 1rem;
       }
     </style>
   </head>
   <body>
     <div id="root">
-      <div class="fallback-root" role="img" aria-label="Coming soon">
-        <h1>suivi-arh-react-django</h1>
-        <p>coming soon</p>
+      <div class="spinner-container">
+        <div>
+          <div class="spinner"></div>
+          <div class="loading-text">Loading...</div>
+        </div>
       </div>
     </div>
     <script type="module" src="/src/main.jsx"></script>
