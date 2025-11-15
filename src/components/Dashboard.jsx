@@ -179,7 +179,7 @@ export default function Dashboard({ token, onLogout = () => {} }) {
                 </Typography>
 
                 <Grid container spacing={2} sx={{ mb: 3 }}>
-                  <Grid item xs={12} sm={6}>
+                  <Grid size={{ xs: 12, sm: 6 }}>
                     <Typography variant="body2" color="text.secondary">
                       Username
                     </Typography>
@@ -187,7 +187,7 @@ export default function Dashboard({ token, onLogout = () => {} }) {
                       {data.username || "N/A"}
                     </Typography>
                   </Grid>
-                  <Grid item xs={12} sm={6}>
+                  <Grid size={{ xs: 12, sm: 6 }}>
                     <Typography variant="body2" color="text.secondary">
                       Email
                     </Typography>
@@ -195,7 +195,7 @@ export default function Dashboard({ token, onLogout = () => {} }) {
                       {data.email || "N/A"}
                     </Typography>
                   </Grid>
-                  <Grid item xs={12} sm={6}>
+                  <Grid size={{ xs: 12, sm: 6 }}>
                     <Typography variant="body2" color="text.secondary">
                       First Name
                     </Typography>
@@ -203,7 +203,7 @@ export default function Dashboard({ token, onLogout = () => {} }) {
                       {data.first_name || "N/A"}
                     </Typography>
                   </Grid>
-                  <Grid item xs={12} sm={6}>
+                  <Grid size={{ xs: 12, sm: 6 }}>
                     <Typography variant="body2" color="text.secondary">
                       Last Name
                     </Typography>
@@ -222,7 +222,7 @@ export default function Dashboard({ token, onLogout = () => {} }) {
 
                     <Grid container spacing={2}>
                       {Object.entries(data.ldap_info).map(([key, value]) => (
-                        <Grid item xs={12} sm={6} key={key}>
+                        <Grid size={{ xs: 12, sm: 6 }} key={key}>
                           <Typography variant="body2" color="text.secondary">
                             {key.charAt(0).toUpperCase() +
                               key.slice(1).replace(/([A-Z])/g, " $1")}
