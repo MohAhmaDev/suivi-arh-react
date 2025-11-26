@@ -25,24 +25,39 @@ export const EquipmentStatusRail = ({
   return (
     <Box
       sx={{
-        p: 2,
+        p: 3,
         borderRadius: 2,
         border: '1px solid',
         borderColor: 'divider',
         backgroundColor: 'background.paper',
+        boxShadow: 'sm',
       }}
     >
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems={{ md: 'center' }}>
         <Box sx={{ flex: 1 }}>
-          <Typography variant="subtitle2" color="text.secondary">
+          <Typography variant="h6" color="text.primary" sx={{ fontSize: '1rem', fontWeight: 600, mb: 0.5 }}>
             État d'avancement
           </Typography>
           {subtitle && (
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body1" color="text.secondary" sx={{ fontSize: '0.8125rem', mb: 2 }}>
               {subtitle}
             </Typography>
           )}
-          <Stepper alternativeLabel activeStep={activeStep === -1 ? 0 : activeStep} sx={{ mt: 2 }}>
+          <Stepper
+            alternativeLabel
+            activeStep={activeStep === -1 ? 0 : activeStep}
+            sx={{
+              mt: 1.5,
+              '& .MuiStepLabel-label': {
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                mt: 1,
+              },
+              '& .MuiStepIcon-root': {
+                fontSize: '1.5rem',
+              },
+            }}
+          >
             {steps.map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>

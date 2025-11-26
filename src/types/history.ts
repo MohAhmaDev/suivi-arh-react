@@ -13,4 +13,5 @@ export interface HistoryEntry {
 export interface HistoryFilters {
   objet_type?: HistoryObjectType;
   objet_id?: number;
+  limit?: number;
 }

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/GridLegacy';
 import { useEquipment } from '../../hooks/queries/useEquipment';
 import { useProjects } from '../../hooks/queries/useProjects';
@@ -11,6 +11,7 @@ import { LoadingState } from '../../components/feedback/LoadingState';
 import { ErrorState } from '../../components/feedback/ErrorState';
 import { EmptyState } from '../../components/shared/EmptyState';
 import type { Project } from '../../types/project';
+import { Button } from '../../components/shared/ui';
 
 const mapProjectsToOptions = (projects: Project[]) => projects.map((project) => ({ id: project.id, nom: project.nom }));
 

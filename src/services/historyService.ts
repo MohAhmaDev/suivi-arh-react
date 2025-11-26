@@ -5,6 +5,7 @@ const buildHistoryQuery = (filters?: HistoryFilters) => {
   const params = new URLSearchParams();
   if (filters?.objet_type) params.append('objet_type', filters.objet_type);
   if (filters?.objet_id) params.append('objet_id', String(filters.objet_id));
+  if (filters?.limit) params.append('limit', String(filters.limit));
   return params.toString();
 };
 

@@ -14,6 +14,7 @@ import { useProjectDetail } from '../../hooks/queries/useProjectDetail';
 import { EquipmentTable } from '../../components/equipment/EquipmentTable';
 import { LoadingState } from '../../components/feedback/LoadingState';
 import { ErrorState } from '../../components/feedback/ErrorState';
+import { useDynamicBreadcrumb } from '../../context/BreadcrumbsContext';
 
 export const ProjectDetailPage = () => {
   const navigate = useNavigate();
@@ -21,6 +22,8 @@ export const ProjectDetailPage = () => {
   const numericId = useMemo(() => Number(projectId), [projectId]);
 
   const { project, equipment, loading, error, refetch } = useProjectDetail(numericId);
+
+  useDynamicBreadcrumb(project?.nom);
 
   if (!projectId || Number.isNaN(numericId)) {
     return <ErrorState error="Identifiant de projet invalide" />;

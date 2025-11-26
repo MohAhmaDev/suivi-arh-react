@@ -7,10 +7,13 @@ import { ProjectList } from '../../components/projects/ProjectList';
 import { LoadingState } from '../../components/feedback/LoadingState';
 import { ErrorState } from '../../components/feedback/ErrorState';
 import type { ProjectFilters, ProjectState } from '../../types/project';
+import { Button } from '../../components/shared/ui';
+import { CreateProjectDialog } from '../../components/forms/CreateProjectDialog';
 
 export const ProjectsPage = () => {
   const [selectedRegion, setSelectedRegion] = useState<number | undefined>();
   const [selectedStatus, setSelectedStatus] = useState<ProjectState | undefined>();
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const {
     data: regions,
@@ -32,6 +35,8 @@ export const ProjectsPage = () => {
     refetch,
   } = useProjects(projectFilters);
 
+  const regionOptions = useMemo(() => regions, [regions]);
+
   if (regionsLoading && regions.length === 0) {
     return <LoadingState message="Chargement des régions..." />;
   }
@@ -47,27 +52,27 @@ export const ProjectsPage = () => {
 
   return (
     <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <Box>
-        <Typography variant="h4" gutterBottom>
-          Projets
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Consultez la liste des projets, filtrez par région ou par état, puis accédez aux détails.
-        </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, flexDirection: { xs: 'column', md: 'row' }, gap: 2 }}>
+        <Box>
+          <Typography variant="h4" gutterBottom>
+            Projets
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Consultez la liste des projets, filtrez par région ou par état, puis accédez aux détails.
+          </Typography>
+        </Box>
+        <Button variant="contained" onClick={() => setIsCreateOpen(true)} disabled={regions.length === 0}>
+          Nouveau projet
+        </Button>
       </Box>
 
       <Paper sx={{ p: 3 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="h6">Filtres</Typography>
           {(selectedRegion || selectedStatus) && (
-            <Typography
-              variant="body2"
-              color="primary"
-              sx={{ cursor: 'pointer' }}
-              onClick={handleResetFilters}
-            >
+            <Button variant="text" size="small" onClick={handleResetFilters}>
               Réinitialiser
-            </Typography>
+            </Button>
           )}
         </Box>
         <Divider sx={{ my: 2 }} />
@@ -85,6 +90,17 @@ export const ProjectsPage = () => {
         loading={projectsLoading}
         error={projectsError}
         onRetry={refetch}
+      />
+
+      <CreateProjectDialog
+        open={isCreateOpen}
+        onClose={() => setIsCreateOpen(false)}
+        regions={regionOptions}
+        defaultRegionId={selectedRegion}
+        onSuccess={() => {
+          refetch();
+          setIsCreateOpen(false);
+        }}
       />
     </Box>
   );

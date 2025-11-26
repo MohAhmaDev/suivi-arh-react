@@ -8,11 +8,14 @@ import {
   Box,
   useTheme,
   useMediaQuery,
+  Stack,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Sidebar from './Sidebar';
+import { Breadcrumbs } from './Breadcrumbs';
 
 const drawerWidth = 240;
+const toolbarHeight = 64;
 
 interface AppShellProps {
   children: ReactNode;
@@ -29,21 +32,46 @@ export const AppShell = ({ children }: AppShellProps) => {
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
-      <AppBar position="fixed" sx={{ zIndex: (t) => t.zIndex.drawer + 1 }}>
-        <Toolbar>
+      <AppBar
+        position="fixed"
+        elevation={0}
+        sx={{
+          zIndex: (t) => t.zIndex.drawer + 1,
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          bgcolor: 'background.paper',
+        }}
+      >
+        <Toolbar sx={{ minHeight: toolbarHeight, px: { xs: 2, md: 3 }, gap: 2 }}>
           {!isDesktop && (
             <IconButton
               color="inherit"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2 }}
+              sx={{ mr: 1 }}
+              aria-label="Ouvrir la navigation"
             >
               <MenuIcon />
             </IconButton>
           )}
-          <Typography variant="h6" noWrap component="div">
-            Suivi ARH
-          </Typography>
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            <Box
+              sx={{
+                width: 32,
+                height: 32,
+                borderRadius: '8px',
+                bgcolor: 'primary.main',
+              }}
+            />
+            <Box>
+              <Typography variant="h4" sx={{ fontSize: '18px' }}>
+                Suivi ARH
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                Ministère de la Santé
+              </Typography>
+            </Box>
+          </Stack>
         </Toolbar>
       </AppBar>
 
@@ -55,7 +83,12 @@ export const AppShell = ({ children }: AppShellProps) => {
           ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: 'block', md: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: drawerWidth,
+              top: toolbarHeight,
+              height: `calc(100vh - ${toolbarHeight}px)`,
+            },
           }}
         >
           <Sidebar onNavigate={handleDrawerToggle} />
@@ -68,6 +101,10 @@ export const AppShell = ({ children }: AppShellProps) => {
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
               width: drawerWidth,
+              top: toolbarHeight,
+              height: `calc(100vh - ${toolbarHeight}px)`,
+              borderRight: '1px solid',
+              borderColor: 'divider',
             },
           }}
         >
@@ -79,11 +116,16 @@ export const AppShell = ({ children }: AppShellProps) => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: { xs: 2, md: 3 },
-          mt: 8,
+          px: { xs: 2, md: 3, lg: 4 },
+          py: { xs: 2, md: 3 },
+          mt: `${toolbarHeight}px`,
           width: { md: `calc(100% - ${drawerWidth}px)` },
+          minHeight: `calc(100vh - ${toolbarHeight}px)`,
+          overflow: 'auto',
+          position: 'relative',
         }}
       >
+        <Breadcrumbs />
         {children}
       </Box>
     </Box>

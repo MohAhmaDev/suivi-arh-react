@@ -1,187 +1,55 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  CircularProgress,
-  CssBaseline,
-  Divider,
-  Paper,
-  Typography,
-} from '@mui/material';
-import Fade from '@mui/material/Fade';
-import GlobalStyles from '@mui/material/GlobalStyles';
-import { Logout as LogoutIcon } from '@mui/icons-material';
-import { useAuth } from '../../context/AuthContext';
+import { Alert, Box, Stack, Typography } from '@mui/material';
+import { useDashboardStats } from '../../hooks/queries/useDashboardStats';
+import { LoadingState } from '../../components/feedback/LoadingState';
+import { ErrorState } from '../../components/feedback/ErrorState';
+import { StatsGrid } from '../../components/dashboard/StatsGrid';
+import { ActivityFeed } from '../../components/dashboard/ActivityFeed';
+import { QuickActions } from '../../components/dashboard/QuickActions';
 
 export const DashboardPage = () => {
-  const { user, loading, logout } = useAuth();
+  const { stats, recentActivity, loading, error, refetch } = useDashboardStats();
 
-  if (loading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgress />
-      </Box>
-    );
+  if (loading && !stats) {
+    return <LoadingState message="Chargement du tableau de bord..." />;
   }
 
-  if (!user) {
-    return null;
+  if (error && !stats) {
+    return <ErrorState error={error} onRetry={refetch} />;
   }
-
-  const displayName = user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.username;
-  const initials = user.first_name?.[0] ?? user.username?.[0] ?? 'U';
 
   return (
-    <>
-      <CssBaseline />
-      <GlobalStyles
-        styles={{
-          'html, body, #root': {
-            height: '100%',
-            margin: 0,
-            padding: 0,
-            overflow: 'hidden',
-          },
-        }}
-      />
+    <Box sx={{ p: { xs: 2, md: 3 }, display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <Stack spacing={1}>
+        <Typography variant="h4" sx={{ fontWeight: 700 }}>
+          Tableau de bord
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          Vue consolidée des projets, équipements, dossiers et courriers en temps réel.
+        </Typography>
+      </Stack>
 
-      <Box
-        sx={{
-          position: 'fixed',
-          inset: 0,
-          background: 'linear-gradient(135deg, #3b82f6 0%, #14b8a6 100%)',
-          filter: 'blur(80px)',
-          transform: 'scale(1.2)',
-          zIndex: 0,
-        }}
-      />
+      {error && (
+        <Alert severity="warning" onClose={refetch} sx={{ borderRadius: 2 }}>
+          {error}
+        </Alert>
+      )}
 
-      <Box
-        sx={{
-          position: 'relative',
-          height: '100dvh',
-          width: '100vw',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          p: 2,
-          zIndex: 1,
-        }}
-      >
-        <Fade in timeout={600}>
-          <Paper
-            elevation={0}
+      {stats && (
+        <Stack spacing={3}>
+          <StatsGrid stats={stats} />
+          <Box
             sx={{
-              width: '100%',
-              maxWidth: 700,
-              p: { xs: 3, sm: 4 },
-              borderRadius: 4,
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(16px)',
-              boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-              overflowY: 'auto',
-              maxHeight: '90dvh',
+              display: 'grid',
+              gap: 3,
+              gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' },
             }}
           >
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                mb: 3,
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Avatar
-                  sx={{
-                    bgcolor: 'primary.main',
-                    width: 56,
-                    height: 56,
-                  }}
-                >
-                  {initials.toUpperCase()}
-                </Avatar>
-                <Box>
-                  <Typography variant="h5" fontWeight={600}>
-                    {displayName}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    @{user.username ?? 'unknown'}
-                  </Typography>
-                </Box>
-              </Box>
-              <Button
-                onClick={logout}
-                variant="contained"
-                color="primary"
-                startIcon={<LogoutIcon />}
-                sx={{
-                  borderRadius: 2,
-                  textTransform: 'none',
-                  fontWeight: 500,
-                }}
-              >
-                Logout
-              </Button>
-            </Box>
-
-            <Divider sx={{ mb: 3 }} />
-            <Typography variant="h6" sx={{ mb: 2 }}>
-              Account Information
-            </Typography>
-
-            <Box
-              sx={{
-                display: 'grid',
-                gap: 2,
-                gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))' },
-                mb: 3,
-              }}
-            >
-              {[
-                { label: 'Username', value: user.username ?? 'N/A' },
-                { label: 'Email', value: user.email ?? 'N/A' },
-                { label: 'First Name', value: user.first_name ?? 'N/A' },
-                { label: 'Last Name', value: user.last_name ?? 'N/A' },
-              ].map(({ label, value }) => (
-                <Box key={label}>
-                  <Typography variant="body2" color="text.secondary">
-                    {label}
-                  </Typography>
-                  <Typography variant="body1">{value}</Typography>
-                </Box>
-              ))}
-            </Box>
-
-            {user.ldap_info && Object.keys(user.ldap_info).length > 0 && (
-              <>
-                <Divider sx={{ mb: 3 }} />
-                <Typography variant="h6" sx={{ mb: 2 }}>
-                  LDAP Information
-                </Typography>
-
-                <Box
-                  sx={{
-                    display: 'grid',
-                    gap: 2,
-                    gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))' },
-                  }}
-                >
-                  {Object.entries(user.ldap_info).map(([key, value]) => (
-                    <Box key={key}>
-                      <Typography variant="body2" color="text.secondary">
-                        {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
-                      </Typography>
-                      <Typography variant="body1">{value || 'N/A'}</Typography>
-                    </Box>
-                  ))}
-                </Box>
-              </>
-            )}
-          </Paper>
-        </Fade>
-      </Box>
-    </>
+            <ActivityFeed activities={recentActivity} loading={loading} />
+            <QuickActions />
+          </Box>
+        </Stack>
+      )}
+    </Box>
   );
 };
 

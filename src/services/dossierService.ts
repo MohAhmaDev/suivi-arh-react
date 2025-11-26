@@ -6,6 +6,7 @@ import type {
   DossierValidationPayload,
 } from '../types/dossier';
 import type { Courrier } from '../types/courrier';
+import type { DossierStats } from '../types/stats';
 
 const buildDossierQuery = (filters?: DossierFilters) => {
   const params = new URLSearchParams();
@@ -43,4 +44,7 @@ export const dossierService = {
 
   getCourriers: (id: number) =>
     http<Courrier[]>({ url: `/api/dossiers/${id}/courriers/` }),
+
+  stats: (signal?: AbortSignal) =>
+    http<DossierStats>({ url: '/api/dossiers/stats/', signal }),
 };

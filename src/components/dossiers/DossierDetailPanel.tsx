@@ -102,7 +102,7 @@ export const DossierDetailPanel = ({ dossier, courriers, onCourrierSelect }: Dos
                         courrier.date_envoi ? new Date(courrier.date_envoi).toLocaleDateString('fr-FR') : '—'
                       }`}
                     />
-                    <StatusChip status={courrier.statut} variant="outlined" />
+                    <StatusChip status={courrier.statut} />
                   </ListItemButton>
                 </ListItem>
               ))}
